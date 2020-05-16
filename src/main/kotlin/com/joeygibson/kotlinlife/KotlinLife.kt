@@ -61,7 +61,7 @@ class KotlinLife : CliktCommand() {
                 terminal.pollInput()?.let {
                     return
                 }
-                
+
                 Thread.sleep(wait)
             }
         }
