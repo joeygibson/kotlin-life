@@ -25,7 +25,7 @@ class KotlinLife : CliktCommand() {
         val foregroundColor = TextColor.Factory.fromString(foreground ?: "white")
         val backgroundColor = TextColor.Factory.fromString(background ?: "black")
 
-        val terminal = setupScreen(foregroundColor, backgroundColor)
+        val terminal = setupTerminal(foregroundColor, backgroundColor)
 
         val columns = columns ?: terminal.terminalSize.columns
         val rows = rows ?: terminal.terminalSize.rows
@@ -48,6 +48,7 @@ class KotlinLife : CliktCommand() {
                 displayBoard(terminal, board, columns, rows)
 
                 terminal.pollInput()?.let {
+                    resetTerminal(terminal)
                     return
                 }
 
@@ -59,6 +60,7 @@ class KotlinLife : CliktCommand() {
                 displayBoard(terminal, board, columns, rows)
 
                 terminal.pollInput()?.let {
+                    resetTerminal(terminal)
                     return
                 }
 
@@ -108,7 +110,7 @@ class KotlinLife : CliktCommand() {
         terminal.flush()
     }
 
-    private fun setupScreen(foreground: TextColor, background: TextColor): Terminal {
+    private fun setupTerminal(foreground: TextColor, background: TextColor): Terminal {
         val defaultTerminalFactory = DefaultTerminalFactory()
         val terminal = defaultTerminalFactory.createTerminal()
 
@@ -117,6 +119,11 @@ class KotlinLife : CliktCommand() {
         terminal.setBackgroundColor(background)
 
         return terminal
+    }
+
+    private fun resetTerminal(terminal: Terminal) {
+        terminal.clearScreen()
+        terminal.setCursorVisible(true)
     }
 }
 
