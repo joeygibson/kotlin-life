@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+java -Djava.awt.headless=true -jar build/libs/kotlin-life-all.jar $*
+

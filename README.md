@@ -11,7 +11,7 @@ in a terminal window, using `ncurses` for drawing.
 Running `./gradle shadowJar` will generate `build/libs/kotlin-life-all.jar`.
 
 ## Running
-You can just run it by running `gradle run`, or using `java -jar build/libs/kotlin-life-all.jar`
+You can just run it by running `./kotlin-life`.
 
 The full set of options are these
 
