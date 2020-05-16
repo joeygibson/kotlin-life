@@ -1,12 +1,10 @@
 package entities
 
-class Cell(val alive: Boolean) {
-    fun isAlive(): Boolean = alive
-
+class Cell(private val alive: Boolean) {
     fun step(neighbors: Array<Cell>): Cell {
-        val liveCount = neighbors.filter { cell -> cell.isAlive() }.count()
+        val liveCount = neighbors.filter { cell -> cell.alive }.count()
 
-        return if (this.isAlive()) {
+        return if (this.alive) {
             if (liveCount < 2 || liveCount > 3) {
                 Cell(false)
             } else {
@@ -22,7 +20,7 @@ class Cell(val alive: Boolean) {
     }
 
     fun toPrintableChar(): Char =
-            if (this.isAlive()) {
+            if (this.alive) {
                 '*'
             } else {
                 ' '

@@ -4,8 +4,8 @@ import kotlin.random.Random.Default.nextInt
 
 class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
         Iterator<Array<Cell>> {
-    var cells = arrayOf<Array<Cell>>()
-    var iteratorPosition: Int = 0
+    private var cells = arrayOf<Array<Cell>>()
+    private var iteratorPosition: Int = 0
 
     init {
         val seeds = if (hacker) {
@@ -33,7 +33,7 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
             times = nextInt(1, rows * columns)
         }
 
-        for (i in 0..times) {
+        for (i in 0 until times) {
             val row = nextInt(0, rows)
             val col = nextInt(0, columns)
 
@@ -46,10 +46,10 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
     fun step() {
         var newCells = arrayOf<Array<Cell>>()
 
-        for (i in 0..rows) {
+        for (i in 0 until rows) {
             var row = arrayOf<Cell>()
 
-            for (j in 0..columns) {
+            for (j in 0 until columns) {
                 val neighbors = getNeighbors(i, j)
 
                 row += cells[i][j].step(neighbors)
@@ -65,8 +65,8 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
     private fun getNeighbors(row: Int, column: Int): Array<Cell> {
         var neighbors = arrayOf<Cell>()
 
-        for (i in -1..2) {
-            for (j in -1..2) {
+        for (i in -1 until 2) {
+            for (j in -1 until 2) {
                 var newRow = row + i
                 var newCol = column + j
 
@@ -82,7 +82,7 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
                     newCol = columns - 1
                 }
 
-                if (newRow != row && newCol != column) {
+                if (!(newRow == row && newCol == column)) {
                     neighbors += cells[newRow][newCol]
                 }
             }
