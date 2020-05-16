@@ -7,6 +7,8 @@
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.3.70"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
+    id("java")
 
     // Apply the application plugin to add support for building a CLI application.
     application
@@ -19,6 +21,8 @@ repositories {
 }
 
 dependencies {
+    implementation("com.github.ajalt:clikt:2.7.0")
+
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
@@ -34,5 +38,18 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = "com.joeygibson.kotlinlife.AppKt"
+    mainClassName = "com.joeygibson.kotlinlife.MainKt"
 }
+
+buildscript {
+    repositories {
+        // Use jcenter for resolving dependencies.
+        // You can declare any Maven/Ivy/file repository here.
+        jcenter()
+    }
+
+    dependencies {
+        classpath("com.github.jengelman.gradle.plugins:shadow:5.2.0")
+    }
+}
+
