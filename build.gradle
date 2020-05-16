@@ -10,9 +10,13 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
+
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+//    id 'java'
 }
 
 repositories {
+    mavenCentral()
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
@@ -20,6 +24,8 @@ repositories {
 
 dependencies {
     implementation('com.github.ajalt:clikt:2.7.0')
+
+    implementation('com.googlecode.lanterna:lanterna:3.0.3')
 
     // Align versions of all Kotlin components
     implementation platform('org.jetbrains.kotlin:kotlin-bom')
@@ -36,5 +42,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'com.joeygibson.kotlinlife.AppKt'
+    mainClassName = 'com.joeygibson.kotlinlife.KotlinLifeKt'
 }

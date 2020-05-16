@@ -2,8 +2,10 @@ package entities
 
 import kotlin.random.Random.Default.nextInt
 
-class Board(private val rows: Int, private val columns: Int, hacker: Boolean) {
-    private var cells = arrayOf<Array<Cell>>()
+class Board(private val rows: Int, private val columns: Int, hacker: Boolean) :
+        Iterator<Array<Cell>> {
+    var cells = arrayOf<Array<Cell>>()
+    var iteratorPosition: Int = 0
 
     init {
         val seeds = if (hacker) {
@@ -57,6 +59,7 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) {
         }
 
         this.cells = newCells
+        this.iteratorPosition = 0
     }
 
     private fun getNeighbors(row: Int, column: Int): Array<Cell> {
@@ -91,10 +94,10 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) {
     private fun createCells(rows: Int, columns: Int, seeds: Array<Pair<Int, Int>>?): Array<Array<Cell>> {
         var cells = arrayOf<Array<Cell>>()
 
-        for (i in 0..rows) {
+        for (i in 0 until rows) {
             var array = arrayOf<Cell>()
 
-            for (j in 0..columns) {
+            for (j in 0 until columns) {
                 array += Cell(false)
             }
 
@@ -116,5 +119,15 @@ class Board(private val rows: Int, private val columns: Int, hacker: Boolean) {
         }
 
         return output.joinToString("\n")
+    }
+
+    override fun hasNext(): Boolean = iteratorPosition < rows
+
+    override fun next(): Array<Cell> {
+        val row = cells[iteratorPosition]
+
+        iteratorPosition += 1
+
+        return row
     }
 }
