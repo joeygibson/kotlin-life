@@ -98,7 +98,7 @@ class KotlinLife : CliktCommand() {
         }
 
         // bottom line
-        terminal.setCursorPosition(0, rows)
+        terminal.setCursorPosition(0, rows + 1)
         terminal.putCharacter(Symbols.SINGLE_LINE_BOTTOM_LEFT_CORNER)
 
         for (i in 0 until columns) {
