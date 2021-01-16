@@ -41,14 +41,16 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew shadowJar
       - name: Set jar name
-        run: echo "JAR_NAME=${GITHUB_REPOSITORY#joeygibson/}-${GITHUB_REF#refs/*/v}.jar" >> $GITHUB_ENV
+        run: echo "JAR_NAME=build/libs/${GITHUB_REPOSITORY#joeygibson/}-all.jar" >> $GITHUB_ENV
+      - name: Set distribution jar name
+        run: echo "DIST_JAR_NAME=${GITHUB_REPOSITORY#joeygibson/}-${GITHUB_REF#refs/*/v}.jar" >> $GITHUB_ENV
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_name: ${{ env.JAR_NAME }}
-          asset_path: build/libs/${GITHUB_REPOSITORY#joeygibson/}-all.jar
+          asset_name: ${{ env.DIST_JAR_NAME }}
+          asset_path: ${{ env.JAR_NAME }}
           asset_content_type: application/octet-stream
   
