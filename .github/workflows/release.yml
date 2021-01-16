@@ -5,10 +5,34 @@ on:
       - 'v[0-9]+.*'
 
 jobs:
-  release:
+  create_release:
+    name: Create release
     runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+  release_assets:
+    name: Release assets
+    needs: create_release
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+          - os: macOS-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
@@ -21,8 +45,15 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle
         run: ./gradlew shadowJar
-      - uses: actions/upload-artifact@v2
+      - name: Set jar name
+        run: echo "JAR_NAME=${GITHUB_REPOSITORY#joeygibson/}-${GITHUB_REF#refs/*/v}.jar" >> $GITHUB_ENV
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Package
-          path: build/libs
-        
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_name: ${{ env.JAR_NAME }}
+          asset_path: build/libs/kotlin-life-all.jar
+          asset_content_type: application/octet-stream
+  
