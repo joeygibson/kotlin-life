@@ -1,11 +1,10 @@
-name: build
-
+name: release
 on:
   push:
-  pull_request:
-    branches: [ master ]
+    tags:
+      - 'v[0-9]+.*'
 
-jobs:
+obs:
   build:
     runs-on: ubuntu-latest
     steps:
@@ -22,3 +21,8 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: build/libs
